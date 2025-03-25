@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HomeController {
-	@GetMapping
-	public ResponseEntity<String> homeController() {
-		return ResponseEntity.ok().body("Welcome to Online Food Service Application");
-	}
+    @GetMapping
+    public ResponseEntity<String> homeController() {
+        return ResponseEntity.ok().body("Welcome to Online Food Service Application");
+    }
 }

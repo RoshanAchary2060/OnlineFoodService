@@ -1,5 +1,6 @@
 package com.roshan.request;
 
+import com.roshan.entity.Address;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class OrderRequest {
 
-    private String email;
-    private String password;
+    private Long restaurantId;
+    private Address deliveryAddress;
 }

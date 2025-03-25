@@ -1,11 +1,10 @@
 package com.roshan.repo;
 
+import com.roshan.entity.Ingredient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.roshan.entity.Ingredient;
-
 @Repository
-public interface IIngredientRepo extends JpaRepository<Ingredient, Long>{
+public interface IIngredientRepo extends JpaRepository<Ingredient, Long> {
 
 }

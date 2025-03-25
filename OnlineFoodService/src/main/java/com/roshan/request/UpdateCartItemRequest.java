@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class UpdateCartItemRequest {
 
-    private String email;
-    private String password;
+    private Long cartItemId;
+    private int quantity;
 }
