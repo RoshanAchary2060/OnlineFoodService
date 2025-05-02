@@ -1,13 +1,17 @@
 package com.roshan.service;
 
-import com.roshan.entity.Category;
 import com.roshan.entity.Food;
+import com.roshan.entity.Ingredient;
 import com.roshan.entity.Restaurant;
+import com.roshan.repo.ICategoryRepo;
 import com.roshan.repo.IFoodRepo;
+import com.roshan.repo.IIngredientRepo;
 import com.roshan.request.CreateFoodRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,20 +21,33 @@ public class FoodServiceImpl implements IFoodService {
 
     @Autowired
     IFoodRepo foodRepo;
+    @Autowired
+    IIngredientRepo ingredientRepo;
+    @Autowired
+    ICategoryRepo categoryRepo;
 
     @Override
-    public Food createFood(CreateFoodRequest req, Category category, Restaurant restaurant) {
+    public Food createFood(CreateFoodRequest req, Long categoryId, Restaurant restaurant) {
         Food food = new Food();
-        food.setFoodCategory(category);
+        food.setFoodCategory(categoryRepo.findById(categoryId).orElseThrow(()-> new RuntimeException("Category with id : " + categoryId + " does not exist!")));
         food.setRestaurant(restaurant);
         food.setDescription(req.getDescription());
         food.setImages(req.getImages());
         food.setName(req.getName());
         food.setPrice(req.getPrice());
-        food.setIngredients(req.getIngredients());
+        for(Long id: req.getIngredientsIds()) {
+            Ingredient i = ingredientRepo.findById(id).orElse(null);
+            if(i != null) {
+                food.getIngredients().add(i);
+            } else {
+                throw new RuntimeException("Ingredient with id : " + id + " does not exist!");
+            }
+        }
         food.setSeasonal(req.isSeasonal());
         food.setVegetarian(req.isVegetarian());
-
+        food.setNonVeg(req.isNonVeg());
+        food.setAvailable(true);
+        food.setCreationDate(new Date());
         Food savedFood = foodRepo.save(food);
         restaurant.getFoods().add(savedFood);
         return savedFood;
@@ -48,7 +65,7 @@ public class FoodServiceImpl implements IFoodService {
                                          String foodCategory) {
         List<Food> foods = foodRepo.findByRestaurantId(restaurantId);
         if (isVegetarian) {
-            foods = filterByVegeterian(foods, isVegetarian);
+            foods = filterByVegetarian(foods, isVegetarian);
         }
         if (isNonVeg) {
             foods = filterByNonVeg(foods, isNonVeg);
@@ -56,11 +73,11 @@ public class FoodServiceImpl implements IFoodService {
         if (isSeasonal) {
             foods = filterBySeasonal(foods, isSeasonal);
         }
-        if (foodCategory != null && !foodCategory.equals("")) {
+        if (StringUtils.hasText(foodCategory)) {
             foods = filterByCategory(foods, foodCategory);
         }
+        System.out.println("food size:" + foods.size());
         return foods;
-
     }
 
     private List<Food> filterByCategory(List<Food> foods, String foodCategory) {
@@ -73,22 +90,19 @@ public class FoodServiceImpl implements IFoodService {
     }
 
     private List<Food> filterBySeasonal(List<Food> foods, boolean isSeasonal) {
-
         return foods.stream().filter(food -> food.isSeasonal() == isSeasonal).collect(Collectors.toList());
     }
 
     private List<Food> filterByNonVeg(List<Food> foods, boolean isNonVeg) {
-        return foods.stream().filter(food -> food.isVegetarian() == false).collect(Collectors.toList());
+        return foods.stream().filter(food -> food.isNonVeg() == isNonVeg).collect(Collectors.toList());
     }
 
-    private List<Food> filterByVegeterian(List<Food> foods, boolean isVegetarian) {
-
+    private List<Food> filterByVegetarian(List<Food> foods, boolean isVegetarian) {
         return foods.stream().filter(food -> food.isVegetarian() == isVegetarian).collect(Collectors.toList());
     }
 
     @Override
     public List<Food> searchFoods(String keyword) {
-
         return foodRepo.searchFood(keyword);
     }
 
@@ -96,7 +110,7 @@ public class FoodServiceImpl implements IFoodService {
     public Food findFoodById(Long foodId) throws Exception {
         Optional<Food> opt = foodRepo.findById(foodId);
         if (opt.isEmpty()) {
-            throw new Exception("Food doesnot exist!");
+            throw new Exception("Food does not exist!");
         }
         return opt.get();
     }
@@ -107,5 +121,4 @@ public class FoodServiceImpl implements IFoodService {
         food.setAvailable(!food.isAvailable());
         return foodRepo.save(food);
     }
-
 }

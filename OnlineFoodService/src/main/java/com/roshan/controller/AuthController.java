@@ -2,9 +2,11 @@ package com.roshan.controller;
 
 import com.roshan.config.JwtProvider;
 import com.roshan.entity.Cart;
+import com.roshan.entity.Jwt;
 import com.roshan.entity.Users;
 import com.roshan.model.USER_ROLE;
 import com.roshan.repo.ICartRepo;
+import com.roshan.repo.IJwtRepo;
 import com.roshan.repo.IUserRepo;
 import com.roshan.request.LoginRequest;
 import com.roshan.response.AuthResponse;
@@ -23,25 +25,29 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private IUserRepo userRepo;
+    private final IUserRepo userRepo;
 
-    @Autowired
-    PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
-    @Autowired
-    private JwtProvider jwtProvider;
+    private final JwtProvider jwtProvider;
 
-    @Autowired
-    private CustomUserDetailsService udService;
+    private final CustomUserDetailsService udService;
 
     @Autowired
     private ICartRepo cartRepo;
+    private final IJwtRepo jwtRepo;
+
+    public AuthController(IUserRepo userRepo, PasswordEncoder encoder, JwtProvider jwtProvider, CustomUserDetailsService udService, IJwtRepo repo) {
+        this.userRepo = userRepo;
+        this.encoder = encoder;
+        this.jwtProvider = jwtProvider;
+        this.udService = udService;
+        this.jwtRepo = repo;
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody Users user) throws Exception {
@@ -63,6 +69,7 @@ public class AuthController {
         String jwt = jwtProvider.generateToken(authentication);
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(jwt);
+
         authResponse.setRole(savedUser.getRole());
         authResponse.setMessage("Registration successful...");
 
@@ -84,7 +91,8 @@ public class AuthController {
         AuthResponse authResponse = new AuthResponse();
 
         authResponse.setJwt(jwt);
-
+        jwtRepo.deleteAll();
+        jwtRepo.save(new Jwt(null, jwt));
         authResponse.setMessage("Login Successful...");
         authResponse.setRole(USER_ROLE.valueOf(role));
 

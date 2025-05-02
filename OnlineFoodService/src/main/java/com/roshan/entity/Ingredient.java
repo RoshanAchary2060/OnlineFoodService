@@ -16,7 +16,8 @@ public class Ingredient {
     private Long id;
     private String name;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private IngredientCategory category;
 
     @ManyToOne

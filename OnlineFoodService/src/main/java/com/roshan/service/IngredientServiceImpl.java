@@ -45,14 +45,23 @@ public class IngredientServiceImpl implements IIngredientService {
 
     @Override
     public Ingredient createIngredient(Long restaurantId, String ingredientName, Long categoryId) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+        Ingredient ingredient = new Ingredient();
+        Restaurant restaurant = restaurantService.findRestaurantById(restaurantId);
+        IngredientCategory category = ingredientCategoryRepo.findById(categoryId).orElse(null);
+        if(category != null) {
+            ingredient.setCategory(category);
+        }
+        if(restaurant != null) {
+            ingredient.setRestaurant(restaurant);
+        }
+        ingredient.setName(ingredientName);
+        ingredient = ingredientRepo.save(ingredient);
+        return ingredient;
     }
 
     @Override
     public List<Ingredient> findRestaurantIngredients(Long restaurantId) {
-        // TODO Auto-generated method stub
-        return null;
+        return ingredientRepo.findByRestaurantId(restaurantId);
     }
 
     @Override

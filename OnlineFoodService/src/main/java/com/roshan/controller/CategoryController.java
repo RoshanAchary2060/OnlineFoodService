@@ -2,6 +2,7 @@ package com.roshan.controller;
 
 import com.roshan.entity.Category;
 import com.roshan.entity.Users;
+import com.roshan.request.FoodCategoryRequest;
 import com.roshan.service.ICategoryService;
 import com.roshan.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +22,20 @@ public class CategoryController {
     private IUserService userService;
 
     @PostMapping("/admin/category/create")
-    public ResponseEntity<Category> createCategory(@RequestBody Category category,
+    public ResponseEntity<Category> createCategory(@RequestBody FoodCategoryRequest category,
                                                    @RequestHeader("Authorization") String jwt) throws Exception {
         Users user = userService.findUserByJwtToken(jwt);
-        Category createdCategory = categoryService.createCategory(category.getName(), user.getId());
+        Category createdCategory = categoryService.createCategory(category);
 
         return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
-
     }
 
-    @GetMapping("/category/restaurant")
+    @GetMapping("/category/restaurant/{restaurantId}")
     public ResponseEntity<List<Category>> getRestaurantCategory(
-            @RequestHeader("Authorization") String jwt) throws Exception {
+            @RequestHeader("Authorization") String jwt,
+            @PathVariable Long restaurantId) throws Exception {
         Users user = userService.findUserByJwtToken(jwt);
-        List<Category> categories = categoryService.findCategoryByRestaurantId(user.getId());
+        List<Category> categories = categoryService.findCategoryByRestaurantId(restaurantId);
         return new ResponseEntity<>(categories, HttpStatus.CREATED);
-
     }
 }

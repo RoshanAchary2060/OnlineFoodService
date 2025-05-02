@@ -15,11 +15,12 @@ public class CreateFoodRequest {
     private String name;
     private String description;
     private Long price;
-    private Category category;
+    private Long categoryId;
     private List<String> images;
     private Long restaurantId;
     private boolean vegetarian;
+    private boolean isNonVeg;
     private boolean seasonal;
-    private List<Ingredient> ingredients;
+    private List<Long> ingredientsIds;
 
 }

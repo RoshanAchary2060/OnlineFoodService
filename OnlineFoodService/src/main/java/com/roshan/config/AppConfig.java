@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.server.ServerWebExchange;
 
 import java.util.Arrays;
@@ -24,28 +24,29 @@ public class AppConfig {
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(
-                        authorize -> authorize.requestMatchers("/api/admin?**").hasAnyRole("RESTAURANT_OWNER", "ADMIN")
-                                .requestMatchers("/api/**").authenticated().anyRequest().permitAll())
-                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class).csrf(csrf -> csrf.disable());
-//				.cors(cors -> cors.configurationSource(corsConfigurationSource()));
-//		
+                        authorize -> authorize
+                                .requestMatchers("/api/admin**").hasAnyRole("RESTAURANT_OWNER", "ADMIN")
+                                .requestMatchers("/api/**").authenticated()
+                                .requestMatchers("/jwt/**").permitAll()
+                                .anyRequest().permitAll())
+                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));  // Enable CORS with the custom configuration
+
         return http.build();
     }
 
-    private CorsConfigurationSource corsConfigurationSource() {
-        return new CorsConfigurationSource() {
-
-            @Override
-            public CorsConfiguration getCorsConfiguration(ServerWebExchange exchange) {
-                CorsConfiguration corsConfiguration = new CorsConfiguration();
-                corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:5000"));
-                corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
-                corsConfiguration.setAllowCredentials(true);
-                corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
-                corsConfiguration.setExposedHeaders(Arrays.asList("Authorization"));
-                corsConfiguration.setMaxAge(3600L);
-                return corsConfiguration;
-            }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        return exchange -> {
+            CorsConfiguration corsConfiguration = new CorsConfiguration();
+            corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Example: Frontend origin
+            corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+            corsConfiguration.setAllowCredentials(true);
+            corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+            corsConfiguration.setExposedHeaders(Arrays.asList("Authorization"));
+            corsConfiguration.setMaxAge(3600L);  // Cache CORS response for 1 hour
+            return corsConfiguration;
         };
     }
 
@@ -53,5 +54,4 @@ public class AppConfig {
     PasswordEncoder pE() {
         return new BCryptPasswordEncoder();
     }
-
 }

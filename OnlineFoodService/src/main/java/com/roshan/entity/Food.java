@@ -39,6 +39,7 @@ public class Food {
     private Restaurant restaurant;
 
     private boolean isVegetarian;
+    private boolean isNonVeg;
     private boolean isSeasonal;
 
     @ManyToMany

@@ -1,0 +1,71 @@
+export const topMeals  = [
+    {
+        image:'src/images/pizza.jpg',
+        title:'pizza'
+    },
+    {
+        image:'src/images/burger.jpg',
+        title:'Burger'
+    },
+    {
+        image:'src/images/sandwich.jpg',
+        title:'Sandwich'
+    },
+    {
+        image:'src/images/friedrice.jpg',
+        title:'Fried Rice'
+    },
+    {
+        image:'src/images/chowmein.webp',
+        title:'Chowmein'
+    },
+    {
+        image:'src/images/cake.jpg',
+        title:'Cake'
+    },
+    {
+        image:'src/images/biryani.jpg',
+        title:'Biryani'
+    },
+    {
+        image:'src/images/panipuri.jpg',
+        title:'Panipuri'
+    },
+    {
+        image:'src/images/samosa.jpg',
+        title:'Samosa'
+    },
+    {
+        image:'src/images/thali.jpg',
+        title:'Thali'
+    },
+    {
+        image:'src/images/northindianfood.jpg',
+        title:'North Indian Food'
+    },
+    {
+        image:'src/images/rolls.jpg',
+        title:'Rolls'
+    },
+    {
+        image:'src/images/chicken.jpg',
+        title:'Chicken'
+    },
+    {
+        image:'src/images/noodles.jpg',
+        title:'Noodles'
+    },
+    {
+        image:'src/images/dosa.jpg',
+        title:'Dosa'
+    },
+    {
+        image:'src/images/icecream.jpg',
+        title:'Ice cream'
+    },
+    {
+        image:'src/images/pakoda.jpg',
+        title:'Pakoda'
+    }    
+    
+] 

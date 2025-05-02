@@ -5,6 +5,7 @@ import com.roshan.entity.Restaurant;
 import com.roshan.entity.Users;
 import com.roshan.service.IRestaurantService;
 import com.roshan.service.IUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/restaurants")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CustomerRestaurantController {
     @Autowired
     private IRestaurantService restaurantService;
@@ -27,7 +30,7 @@ public class CustomerRestaurantController {
         return new ResponseEntity<>(restaurants, HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping("/all")
     public ResponseEntity<List<Restaurant>> getAllRestaurant(@RequestHeader("Authorization") String jwt)
             throws Exception {
         List<Restaurant> restaurants = restaurantService.getAllRestaurants();

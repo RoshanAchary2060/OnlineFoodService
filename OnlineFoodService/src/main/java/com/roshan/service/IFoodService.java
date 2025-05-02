@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IFoodService {
 
-    public Food createFood(CreateFoodRequest req, Category category, Restaurant restaurant);
+    public Food createFood(CreateFoodRequest req, Long categoryId, Restaurant restaurant);
 
     public void deleteFood(Long foodId) throws Exception;
 

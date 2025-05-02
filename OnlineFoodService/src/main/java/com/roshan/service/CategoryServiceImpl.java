@@ -3,6 +3,7 @@ package com.roshan.service;
 import com.roshan.entity.Category;
 import com.roshan.entity.Restaurant;
 import com.roshan.repo.ICategoryRepo;
+import com.roshan.request.FoodCategoryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,19 +20,18 @@ public class CategoryServiceImpl implements ICategoryService {
     IRestaurantService restaurantService;
 
     @Override
-    public Category createCategory(String name, Long userId) throws Exception {
-        Restaurant restaurant = restaurantService.getRestaurantByUserId(userId);
+    public Category createCategory(FoodCategoryRequest request) throws Exception {
+        Restaurant restaurant = restaurantService.findRestaurantById(request.getRestaurantId());
         Category category = new Category();
-        category.setName(name);
+        category.setName(request.getName());
         category.setRestaurant(restaurant);
-
         return categoryRepo.save(category);
     }
 
     @Override
     public List<Category> findCategoryByRestaurantId(Long id) throws Exception {
-        Restaurant restaurant = restaurantService.getRestaurantByUserId(id);
-        return categoryRepo.findByRestaurantId(restaurant.getId());
+//        Restaurant restaurant = restaurantService.getRestaurantByUserId(id);
+        return categoryRepo.findByRestaurantId(id);
     }
 
     @Override
