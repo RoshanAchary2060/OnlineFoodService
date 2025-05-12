@@ -11,8 +11,8 @@ const UserProfile = () => {
   const user = useSelector(store => store.auth.user);
   console.log('user profile user ', user);
   const handleLogout = ()=> {
-    dispatch(logout());
-    navigate("/");
+    dispatch(logout(navigate));
+    // navigate("/");
   }
   return (
     <div className='min-h-[80vh] flex flex-col justify-center items-center text-center'>

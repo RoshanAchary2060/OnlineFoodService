@@ -1,4 +1,4 @@
-package com.roshan.response;
+package com.roshan.repo;
 
 import com.roshan.entity.Address;
 import org.springframework.data.jpa.repository.JpaRepository;

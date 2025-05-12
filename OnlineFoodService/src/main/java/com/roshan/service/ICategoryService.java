@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ICategoryService {
 
-    public Category createCategory(FoodCategoryRequest request) throws Exception;
+    Category createCategory(FoodCategoryRequest request) throws Exception;
 
-    public List<Category> findCategoryByRestaurantId(Long id) throws Exception;
+    List<Category> findCategoryByRestaurantId(Long id) throws Exception;
 
-    public Category findCategoryById(Long id) throws Exception;
+    Category findCategoryById(Long id) throws Exception;
 }

@@ -4,20 +4,18 @@ import com.roshan.entity.Category;
 import com.roshan.entity.Restaurant;
 import com.roshan.repo.ICategoryRepo;
 import com.roshan.request.FoodCategoryRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements ICategoryService {
 
-    @Autowired
-    private ICategoryRepo categoryRepo;
+    private final ICategoryRepo categoryRepo;
 
-    @Autowired
-    IRestaurantService restaurantService;
+    private final IRestaurantService restaurantService;
 
     @Override
     public Category createCategory(FoodCategoryRequest request) throws Exception {
@@ -29,8 +27,7 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public List<Category> findCategoryByRestaurantId(Long id) throws Exception {
-//        Restaurant restaurant = restaurantService.getRestaurantByUserId(id);
+    public List<Category> findCategoryByRestaurantId(Long id) {
         return categoryRepo.findByRestaurantId(id);
     }
 
@@ -42,5 +39,4 @@ public class CategoryServiceImpl implements ICategoryService {
         }
         return opt.get();
     }
-
 }

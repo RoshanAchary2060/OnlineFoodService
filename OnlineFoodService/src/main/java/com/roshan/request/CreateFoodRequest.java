@@ -1,17 +1,15 @@
 package com.roshan.request;
 
-import com.roshan.entity.Category;
-import com.roshan.entity.Ingredient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateFoodRequest {
+
     private String name;
     private String description;
     private Long price;
@@ -22,5 +20,4 @@ public class CreateFoodRequest {
     private boolean isNonVeg;
     private boolean seasonal;
     private List<Long> ingredientsIds;
-
 }

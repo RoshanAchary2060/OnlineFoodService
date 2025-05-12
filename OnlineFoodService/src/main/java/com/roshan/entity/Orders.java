@@ -1,45 +1,41 @@
 package com.roshan.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Orders {
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
+public class Orders extends BaseEntity<Long> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int totalItems;
+    private String orderStatus;
+    private Long totalPrice;
+
     @ManyToOne
+    @JsonIgnore
     private Users customer;
 
-    @JsonIgnore
-    @ManyToOne
-    private Restaurant restaurant;
-
-    private String orderStatus;
-
-    private Date createdAt;
+//    @JsonManagedReference
+//    @ManyToOne
+//    private Restaurant restaurant;
 
     @ManyToOne
     private Address deliveryAddress;
 
     @OneToMany
     private List<OrderItem> items;
-
-    private int totalItems;
-
-    private Long totalPrice;
-
-//	private Payment payment;
-
-
 }

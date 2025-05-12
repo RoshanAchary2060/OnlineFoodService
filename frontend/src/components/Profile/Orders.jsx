@@ -1,14 +1,35 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import OrderCard from './OrderCard'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+import { getUsersOrders } from '../../State/Order/Action';
+import { api } from '../Config/api';
+import { findCart } from '../../State/Cart/Action';
 
 const Orders = () => {
+  const { auth, cart, order } = useSelector((store)=> store);
+  const navigate = useNavigate();
+  const jwt = auth.jwt || localStorage.getItem("jwtoriginal");
+  const dispatch = useDispatch();
+  useEffect(()=> {
+    dispatch(getUsersOrders(jwt));
+    dispatch(findCart(jwt));
+  },[])
   return (
     <div className='flex items-center flex-col'>  
       <h1 className='text-xl text-center py-7 font-semibold'>My Orders</h1>
       <div className='space-y-5 w-full lg:w-1/2'>
+        {/* {
+          
+          order?.map((item)=>
+          <OrderCard item={item} order={order} />)
+        } */}
+
         {
-          [1,1,1,1,1].map((item)=><OrderCard />)
-        }
+    order?.orders?.map((item) => (
+      <OrderCard key={item.id} item={item} />
+    ))
+  }
       </div>
     </div>
     

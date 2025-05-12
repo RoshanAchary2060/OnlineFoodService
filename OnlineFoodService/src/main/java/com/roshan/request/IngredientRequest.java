@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IngredientRequest {
+
     private String name;
     private Long categoryId;
     private Long restaurantId;

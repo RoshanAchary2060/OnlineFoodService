@@ -1,9 +1,10 @@
 package com.roshan.service;
 
+import com.roshan.entity.CustomUserDetails;
 import com.roshan.entity.Users;
 import com.roshan.model.USER_ROLE;
 import com.roshan.repo.IUserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,9 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    @Autowired
-    private IUserRepo repo;
+
+    private final IUserRepo repo;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -27,13 +29,10 @@ public class CustomUserDetailsService implements UserDetailsService {
             USER_ROLE role = user.getRole();
             if (role == null) {
                 role = USER_ROLE.ROLE_CUSTOMER;
-
             }
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(role.toString()));
-            return new User(user.getEmail(), user.getPassword(),
-                    authorities);
-
+            return new CustomUserDetails(user.getId(), user.getEmail(), user.getPassword(), authorities);
         } else {
             throw new UsernameNotFoundException("User not found with email " + username);
         }

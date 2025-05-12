@@ -5,7 +5,6 @@ import com.roshan.entity.Address;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Data
@@ -22,5 +21,4 @@ public class CreateRestaurantRequest {
     private ContactInformation contactInformation;
     private String openingHours;
     private List<String> images;
-
 }

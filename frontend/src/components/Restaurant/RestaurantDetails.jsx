@@ -29,13 +29,12 @@ const foodTypes = [
 ]
 
 const RestaurantDetails = () => {
-
+  const { auth, restaurant, menu } = useSelector(store => store);
   const [foodType, setFoodType] = useState('all');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const jwt = localStorage.getItem("jwt");
-  const { auth, restaurant, menu } = useSelector(store => store);
-  const [ selectedCategory, setSelectedCategory ] = useState("");
+  const jwt = auth.jwt || localStorage.getItem("jwtoriginal");
+  const [ selectedCategory, setSelectedCategory ] = useState(null);
 
   const { id, city } = useParams();
 
@@ -55,35 +54,23 @@ const RestaurantDetails = () => {
     dispatch(getRestaurantsCategory({ jwt, restaurantId: id }));
   }, []);
 
+
+
   useEffect(() => {
-
-      dispatch(getMenuItemsByRestaurantId(
-        { jwt, 
-          restaurantId: id,
-          vegetarian: foodType==='vegetarian', 
-          nonveg: foodType==='non_vegetarian', 
-          seasonal: foodType==='seasonal',
-          foodCategory: selectedCategory }));
-
-  }, [selectedCategory, foodType]);
+  dispatch(getMenuItemsByRestaurantId({
+    jwt, 
+    restaurantId: id,
+    vegetarian: foodType === 'vegetarian', 
+    nonveg: foodType === 'non_vegetarian', 
+    seasonal: foodType === 'seasonal',
+    food_category: selectedCategory || undefined // This is the key change
+  }));
+}, [selectedCategory, foodType, id, jwt, dispatch]);
 
   return (
     <div className='px-5 lg:px-20'>
       <section>
-        <h3 className='text-gray-500 py-2 mt-10' >Home/Nepal/Nepali fast food/3</h3>
-        {/* <div>
-  <Grid container spacing={2}>
-    {restaurant.restaurant?.images?.map((imgUrl, index) => (
-      <Grid item xs={12} lg={6} key={index}>
-        <img
-          className='w-full h-[40vh] object-cover'
-          src={imgUrl}
-          alt={`restaurant-${index}`}
-        />
-      </Grid>
-    ))}
-  </Grid>
-</div> */}
+        <h1 className=' text-xl text-gray-500 text-center py-2 mt-10' >Restaurant Details</h1>
 
         <div>
           <Grid container spacing={2}>

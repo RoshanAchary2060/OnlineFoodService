@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderRequest {
 
-    private Long restaurantId;
+//    private Long restaurantId;
     private Address deliveryAddress;
 }

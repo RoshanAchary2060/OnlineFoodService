@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FoodCategoryRequest {
+
     private String name;
     private Long restaurantId;
 }

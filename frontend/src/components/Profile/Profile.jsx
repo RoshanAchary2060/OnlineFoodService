@@ -22,7 +22,7 @@ const Profile = () => {
                 
                 <Route path='/address' element={<Address />} />
                 
-                <Route path='/events' element={<Events />} />
+                {/* <Route path='/events' element={<Events />} /> */}
                 
                 <Route path='/favorites' element={<Favorites />} />
                 

@@ -1,57 +1,51 @@
 package com.roshan.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import com.roshan.dto.ContactInformation;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class Restaurant {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @OneToOne
-    private Users owner;
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
+public class Restaurant extends BaseEntity<Long> {
 
     private String name;
-
     private String description;
-
     private String cuisineType;
-
-    @OneToOne
-    private Address address;
+    private LocalDateTime registrationDate;
+    private boolean open = true;
+    private String openingHours;
 
     @Embedded
     private ContactInformation contactInformation;
-    private String openingHours;
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Orders> orders = new ArrayList<>();
-
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column(length = 1000)
     private List<String> images;
 
-    private LocalDateTime registrationDate;
+    @OneToOne(cascade = CascadeType.REMOVE)
+    private Users owner;
 
-    private boolean open = true;
+    @OneToOne(cascade = CascadeType.REMOVE)
+    private Address address;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Food> foods = new ArrayList<>();
+//    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE, orphanRemoval = true)
+//    @JsonBackReference
+//    @JsonIgnore
+//    private List<Orders> orders = new ArrayList<>();
 
-
+//    @OneToMany(mappedBy = "restaurant")
+//    @JsonManagedReference("food-restaurant")  // Matches food's back reference
+//    private List<Food> foods;
 }

@@ -10,6 +10,13 @@ const initialState = {
 
 const menuItemReducer = (state = initialState, action) => {
     switch (action.type) {
+case actionTypes.GET_ALL_MENU_ITEMS_SUCCESS:
+      return {
+        ...state,
+        menuItems: action.payload,
+        loading: false
+      };
+
         case actionTypes.CREATE_MENU_ITEM_REQUEST:
         case actionTypes.GET_MENU_ITEMS_BY_RESTAURANT_ID_REQUEST:
         case actionTypes.DELETE_MENU_ITEM_REQUEST:

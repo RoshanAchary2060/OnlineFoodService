@@ -3,20 +3,20 @@ package com.roshan.service;
 import com.roshan.entity.Cart;
 import com.roshan.entity.CartItem;
 import com.roshan.request.AddCartItemRequest;
+import com.roshan.response.CartItemResponse;
+import com.roshan.response.CartResponse;
 
 public interface ICartService {
 
-    public CartItem addItemToCart(AddCartItemRequest req, String jwt) throws Exception;
+    CartItem addItemToCart(AddCartItemRequest req, String jwt) throws Exception;
 
-    public CartItem updateCardItemQuantity(Long cartItemId, int quantity) throws Exception;
+    CartResponse updateCardItemQuantity(Long cartItemId, int quantity) throws Exception;
 
-    public Cart removeItemFromCart(Long cartItemId, String jwt) throws Exception;
+    CartResponse removeItemFromCart(Long cartItemId, String jwt) throws Exception;
 
-    public Long calculateCartTotals(Cart cart) throws Exception;
+    CartResponse findCartById(Long id) throws Exception;
 
-    public Cart findCartById(Long id) throws Exception;
+    Cart findCartByUserId(Long userId) throws Exception;
 
-    public Cart findCartByUserId(Long userId) throws Exception;
-
-    public Cart clearCart(Long userId) throws Exception;
+    CartResponse clearCart(Long userId) throws Exception;
 }

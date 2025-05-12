@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface IIngredientRepo extends JpaRepository<Ingredient, Long> {
-    List<Ingredient> findByRestaurantId(Long restaurantId);
+
+    List<Ingredient> findByRestaurantIdOrderByIdAsc(Long restaurantId);
 }

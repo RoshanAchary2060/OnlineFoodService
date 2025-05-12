@@ -1,44 +1,84 @@
 import { Chip, IconButton } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import  AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { findCart, removeCartItem, updateCartItem } from '../../State/Cart/Action';
 
-const CartItem = () => {
+
+const CartItem = ({ item }) => {
+    const { auth, cart } = useSelector(store => store);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [reload, setReload] = useState(false); // New state to trigger re-render
+
+    const jwt = auth.jwt || localStorage.getItem('jwtoriginal')
+
+    // useEffect(()=>{
+    //     dispatch(findCart(jwt));
+    // },[])
+
+    const handleUpdateCartItem = async (value) => {
+        if (value == -1 && item.quantity === 1) {
+            handleRemoveCartItem();
+        } else {
+            const updatedItem = { cartItemId: item.id, quantity: item.quantity + value };
+            dispatch(updateCartItem({ data: updatedItem, jwt }));
+            setReload(!reload);  // Trigger re-render by toggling reload state
+        }
+    };
+
+    // const handleRemoveCartItem = () => {
+    //     dispatch(removeCartItem({ cartItemId: item.id, jwt: auth.jwt || jwt }));
+    //      dispatch(findCart(jwt));
+    //     //  navigate('/cart');
+    //     // setReload(!reload);  // Trigger re-render after removing item
+
+    // };
+
+    const handleRemoveCartItem = async () => {
+    try {
+        await dispatch(removeCartItem({ cartItemId: item.id, jwt }));
+        // Wait for the removal to complete before refreshing cart
+        await dispatch(findCart(jwt));
+    } catch (error) {
+        console.error("Error removing item:", error);
+    }
+};
+
     return (
         <div className='px-5'>
             <div className='lg:flex items-center lg:space-x-5'>
-
                 <div>
-                    <img className='w-[5rem] h-[5rem] object-cover'
-                        src='https://th.bing.com/th/id/OIP.Q4f5lR46RdwAqe9hXJ7dlAHaF7?rs=1&pid=ImgDetMain'
-                    />
-
+                    <img className='w-[5rem] h-[5rem] object-cover' src={item.food.images[0]} />
                 </div>
                 <div className='fiex items-center justify-between lg:w-[70%]'>
                     <div className='space-y-1 lg:space-y-3 w-full'>
-                        <p>biryani</p>
+                        <p>{item.food.name}</p>
                         <div className='flex justify-between items-center'>
                             <div className='flex items-center space-x-1'>
-                                <IconButton>
-                                    <RemoveCircleOutlineIcon ></RemoveCircleOutlineIcon>
+                                <IconButton onClick={() => handleUpdateCartItem(-1)}>
+                                    <RemoveCircleOutlineIcon />
                                 </IconButton>
                                 <div className='w-5 h-5 text-xs flex items-center justify-center'>
-                                    {5}
+                                    {item.quantity}
                                 </div>
-                                <IconButton>
+                                {/* <IconButton onClick={() => handleUpdateCartItem(1)}>
                                     <AddCircleOutlineIcon />
-                                </IconButton>
+                                </IconButton> */}
                             </div>
                         </div>
                     </div>
-                    <p>₹9999</p>
+                    <p>₹{item.totalPrice}</p>
                 </div>
             </div>
             <div className='pt-3 space-x-2'>
-                {[1,1,1].map((item)=><Chip label={"bread"}/>)}
+                {item.ingredients.map((ingredient) => <Chip label={ingredient} />)}
             </div>
         </div>
-    )
-}
+    );
+};
+
 
 export default CartItem

@@ -2,16 +2,14 @@ package com.roshan.controller;
 
 import com.roshan.config.JwtProvider;
 import com.roshan.entity.Cart;
-import com.roshan.entity.Jwt;
 import com.roshan.entity.Users;
 import com.roshan.model.USER_ROLE;
 import com.roshan.repo.ICartRepo;
-import com.roshan.repo.IJwtRepo;
 import com.roshan.repo.IUserRepo;
 import com.roshan.request.LoginRequest;
 import com.roshan.response.AuthResponse;
 import com.roshan.service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,32 +20,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Collection;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private final IUserRepo userRepo;
-
     private final PasswordEncoder encoder;
-
     private final JwtProvider jwtProvider;
 
     private final CustomUserDetailsService udService;
 
-    @Autowired
-    private ICartRepo cartRepo;
-    private final IJwtRepo jwtRepo;
-
-    public AuthController(IUserRepo userRepo, PasswordEncoder encoder, JwtProvider jwtProvider, CustomUserDetailsService udService, IJwtRepo repo) {
-        this.userRepo = userRepo;
-        this.encoder = encoder;
-        this.jwtProvider = jwtProvider;
-        this.udService = udService;
-        this.jwtRepo = repo;
-    }
+    private final ICartRepo cartRepo;
+    private final IUserRepo userRepo;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody Users user) throws Exception {
@@ -69,35 +55,25 @@ public class AuthController {
         String jwt = jwtProvider.generateToken(authentication);
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(jwt);
-
         authResponse.setRole(savedUser.getRole());
         authResponse.setMessage("Registration successful...");
-
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<AuthResponse> signin(@RequestBody LoginRequest request) {
-
+    public ResponseEntity<AuthResponse> signIn(@RequestBody LoginRequest request) {
         String username = request.getEmail();
         String password = request.getPassword();
-
         Authentication authentication = authenticate(username, password);
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         String role = authorities.isEmpty() ? null : authorities.iterator().next().getAuthority();
-
         String jwt = jwtProvider.generateToken(authentication);
-
+        System.out.println("jwt:" + jwt);
         AuthResponse authResponse = new AuthResponse();
-
         authResponse.setJwt(jwt);
-        jwtRepo.deleteAll();
-        jwtRepo.save(new Jwt(null, jwt));
         authResponse.setMessage("Login Successful...");
         authResponse.setRole(USER_ROLE.valueOf(role));
-
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
-
     }
 
     private Authentication authenticate(String username, String password) {
@@ -109,6 +85,5 @@ public class AuthController {
             throw new BadCredentialsException("Invalid password!");
         }
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
     }
 }

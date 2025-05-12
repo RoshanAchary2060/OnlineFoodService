@@ -25,12 +25,13 @@ export const findCart = (token) => {
     return async (dispatch) => {
         dispatch({ type: FIND_CART_REQUEST });
         try {
-            const response = await api.get(`/api/cart/`, {
+            const response = await api.get(`/api/cart`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
             dispatch({ type: FIND_CART_SUCCESS, payload: response.data });
+            console.log('cart fetched ', response.data);
         } catch (error) {
             dispatch({ type: FIND_CART_FAILURE, payload: error });
         }
@@ -63,6 +64,7 @@ export const addItemToCart = (reqData) => {
                 },
             });
             dispatch({ type: ADD_ITEM_TO_CART_SUCCESS, payload: data });
+            console.log('add item to cart ', data);
         } catch (error) {
             dispatch({ type: ADD_ITEM_TO_CART_FAILURE, payload: error });
         }
@@ -73,9 +75,9 @@ export const updateCartItem = (reqData) => {
     return async (dispatch) => {
         dispatch({ type: UPDATE_CARTITEM_REQUEST });
         try {
-            const { data } = await api.put(`/api/cart-item/update`, reqData.data, {
+            const { data } = await api.put(`/api/cart_item/update`, reqData.data, {
                 headers: {
-                    Authorization: `Bearer ${reqData.token}`,
+                    Authorization: `Bearer ${localStorage.getItem('jwtoriginal')}`,
                 },
             });
             dispatch({ type: UPDATE_CARTITEM_SUCCESS, payload: data });
@@ -89,7 +91,7 @@ export const removeCartItem = ({ cartItemId, jwt }) => {
     return async (dispatch) => {
         dispatch({ type: REMOVE_CARTITEM_REQUEST });
         try {
-            const { data } = await api.delete(`/api/cart-item/${cartItemId}/remove`, {
+            const { data } = await api.delete(`/api/cart_item/${cartItemId}/remove`, {
                 headers: {
                     Authorization: `Bearer ${jwt}`,
                 },

@@ -3,24 +3,24 @@ package com.roshan.service;
 import com.roshan.config.JwtProvider;
 import com.roshan.entity.Users;
 import com.roshan.repo.IUserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 
-    @Autowired
-    IUserRepo userRepo;
+    private final IUserRepo userRepo;
 
-    @Autowired
-    private JwtProvider provider;
+    private final JwtProvider provider;
 
     @Override
     public Users findUserByJwtToken(String jwt) throws Exception {
+        if (jwt != null && jwt.startsWith("Bearer ")) {
+            jwt = jwt.substring(7);
+        }
         String email = provider.getEmailFromJwtToken(jwt);
-        Users user = findUserByEmail(email);
-        return user;
-
+        return findUserByEmail(email);
     }
 
     @Override

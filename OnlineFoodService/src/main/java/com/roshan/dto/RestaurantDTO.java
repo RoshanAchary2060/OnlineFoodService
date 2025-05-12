@@ -1,29 +1,19 @@
 package com.roshan.dto;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.util.List;
 
-@Data
-@Embeddable
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class RestaurantDTO {
 
-
     private Long id;
-
     private String title;
+    private String description;
 
     @Column(length = 1000)
     private List<String> images;
-
-    private String description;
-
-
 }

@@ -19,6 +19,7 @@ export const getIngredientsOfRestaurant = ({ id, jwt }) => {
                 type: GET_INGREDIENTS
                 , payload: response.data
             })
+            console.log('getingredients of restaurant ', response);
         } catch (error) {
 
         }
@@ -29,7 +30,7 @@ export const createIngredient = ({ data, jwt }) => {
     return async (dispatch) => {
         try {
             const response = await api.post(
-                `/api/admin/restaurants`, data,
+                `/api/admin/ingredients/create`, data,
                 {
                     headers: {
                         Authorization: `Bearer ${jwt}`,
@@ -48,7 +49,7 @@ export const createIngredientCategory = ({ data, jwt }) => {
     return async (dispatch) => {
         try {
             const response = await api.post(
-                `/api/admin/ingredients/category`, data,
+                `/api/admin/ingredients/category/create`, data,
                 {
                     headers: {
                         Authorization: `Bearer ${jwt}`,
@@ -82,6 +83,7 @@ export const getIngdientCategory = ({ id, jwt }) => {
                 type: GET_INGREDIENTS_CATEGORY_SUCCESS
                 , payload: response.data
             })
+            console.log('getingredientscategory ', response)
         } catch (error) {
 
         }

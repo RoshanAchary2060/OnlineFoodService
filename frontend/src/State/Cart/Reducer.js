@@ -25,14 +25,16 @@ const cartReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 cart: action.payload,
-                cartItems: action.payload.items,
+                cartItems: action.payload.item,
             };
         case actionTypes.ADD_ITEM_TO_CART_SUCCESS:
+            
             return {
                 ...state,
                 loading: false,
                 cartItems: [action.payload, ...state.cartItems],
             };
+
         case actionTypes.UPDATE_CARTITEM_SUCCESS:
             return {
                 ...state,
@@ -40,6 +42,16 @@ const cartReducer = (state = initialState, action) => {
                 cartItems: state.cartItems.map((item) =>
                     item.id === action.payload.id ? action.payload : item),
             };
+
+// case actionTypes.UPDATE_CARTITEM_SUCCESS:
+//     return {
+//         ...state,
+//         loading: false,
+//         cartItems: state.cartItems.map((item) =>
+//             item.id === action.payload.id ? { ...action.payload } : item // Ensure new object
+//         ),
+//     };
+
         case actionTypes.REMOVE_CARTITEM_SUCCESS:
             return {
                 ...state,

@@ -1,6 +1,6 @@
 import * as actionTypes from './ActionType';
 
-const initialState = {
+export const initialState = {
     restaurants: [],
     usersRestaurant: null,
     restaurant: null,
@@ -9,10 +9,30 @@ const initialState = {
     events: [],
     restaurantsEvents: [],
     categories: [],
+    favorites: [],
 };
 
 const restaurantReducer = (state = initialState, action) => {
     switch (action.type) {
+
+case actionTypes.CLEAR_RESTAURANT:
+      return {
+        ...state,
+        restaurants: [],
+        usersRestaurant: null,
+        restaurant: null,
+        events: [],
+        restaurantsEvents: [],
+        categories: [],
+        favorites: [],
+      };
+
+
+        case "GET_USER_FAVORITES_SUCCESS":
+            return { ...state, favorites: action.payload };
+        case "GET_USER_FAVORITES_FAIL":
+            return { ...state, favorites: [] };
+
         case actionTypes.CREATE_RESTAURANT_REQUEST:
         case actionTypes.GET_ALL_RESTAURANTS_REQUEST:
         case actionTypes.DELETE_RESTAURANT_REQUEST:
