@@ -65,7 +65,7 @@ const IngredientsCategoryTable = () => {
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
 
-                                        <TableCell align="left">{item.name}</TableCell>
+                                        <TableCell align="left">{item.id}</TableCell>
                                         <TableCell align="left">{item.name}</TableCell>
 
                                     </TableRow>
