@@ -5,6 +5,7 @@ import com.roshan.repo.IFoodRepo;
 import com.roshan.service.IFoodService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +41,51 @@ public class CustomerFoodController {
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
 
+//    @GetMapping()
+//    public ResponseEntity<List<Food>> getAllFoods(@RequestHeader("Authorization") String jwt) {
+//        List<Food> foods = foodRepo.findAll();
+//        return new ResponseEntity<>(foods, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/hth")
+//    public ResponseEntity<List<Food>> getFoodsSortedLowToHigh() {
+//        List<Food> foods = foodRepo.findAll(Sort.by(Sort.Direction.DESC, "price"));
+//        return ResponseEntity.ok(foods);
+//    }
+//
+//    @GetMapping("/htl")
+//    public ResponseEntity<List<Food>> getFoodsSortedHighToLow() {
+//        List<Food> foods = foodRepo.findAll(Sort.by(Sort.Direction.ASC, "price"));
+//        return ResponseEntity.ok(foods);
+//    }
+
     @GetMapping()
-    public ResponseEntity<List<Food>> getAllFoods(@RequestHeader("Authorization") String jwt) {
-        List<Food> foods = foodRepo.findAll();
+    public ResponseEntity<List<Food>> getAllFoods(
+            @RequestHeader("Authorization") String jwt,
+            @RequestParam(required = false) String food,   // search text, optional
+            @RequestParam(required = false) String sort    // "htl" or "hth" or null
+    ) {
+        Sort sortOrder = Sort.unsorted();
+
+        if ("hth".equalsIgnoreCase(sort)) {
+            // Price low to high
+            sortOrder = Sort.by(Sort.Direction.ASC, "price");
+        } else if ("htl".equalsIgnoreCase(sort)) {
+            // Price high to low
+            sortOrder = Sort.by(Sort.Direction.DESC, "price");
+        }
+
+        List<Food> foods;
+
+        if (food != null && !food.isBlank()) {
+            // Search by food name with optional sorting
+            foods = foodRepo.findByNameContainingIgnoreCase(food, sortOrder);
+        } else {
+            // No search text; just return all with sorting if specified
+            foods = foodRepo.findAll(sortOrder);
+        }
+
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
+
 }

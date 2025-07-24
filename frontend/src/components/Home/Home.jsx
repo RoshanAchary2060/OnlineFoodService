@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.css';
 import MultiItemCarousel from './MultiItemCarousel';
 import RestaurantCard from '../Restaurant/RestaurantCard';
@@ -15,6 +15,30 @@ const Home = () => {
   const navigate = useNavigate();
   const { restaurant, auth, menu } = useSelector(store => store);
   const jwt = auth.jwt || localStorage.getItem('jwtoriginal');
+
+  // const handleSortChange = (value) => {
+  //   if (value === "lowToHigh") {
+  //     dispatch(getAllMenu(jwt, "hth")); // low to high
+  //   } else if (value === "highToLow") {
+  //     dispatch(getAllMenu(jwt, "htl")); // high to low
+  //   } else {
+  //     dispatch(getAllMenu(jwt, "")); // default
+  //   }
+  // };
+
+  const handleSortChange = (value) => {
+    setSortOrder(value);
+    dispatch(getAllMenu(jwt, value, searchText));
+  };
+
+
+  const [searchText, setSearchText] = useState("");
+
+  const [sortOrder, setSortOrder] = useState(""); // "hth", "htl", or ""
+  const applySearchAndSort = () => {
+    dispatch(getAllMenu(jwt, sortOrder, searchText));
+  };
+
 
   useEffect(() => {
     if (jwt) {
@@ -45,14 +69,40 @@ const Home = () => {
 
       <section className='p-10 lg:py-10 lg:px-20'>
         <p className='text-2xl font-semibold text-gray-400 py-3 pb-10'>Top Meals Available Today</p>
-        {/* <div className='space-y-5 lg:w-[80%] lg:pl-10' >
-          {
-            menu.allMenu.map((item) =>
-              <MenuCard item={item} />
-            )
-          }
-        </div> */}
 
+        <select
+          onChange={(e) => handleSortChange(e.target.value)}
+          className="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700"
+        >
+          <option value="">Default</option>
+          <option value="hth">Price: Low to High</option>
+          <option value="htl">Price: High to Low</option>
+        </select>
+
+        <div className="flex gap-3 mt-2 text-gray-200 mb-2 items-center">
+          {/* <input
+            type="text"
+            placeholder="Search meals..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700"
+          /> */}
+
+          <input
+            type="text"
+            placeholder="Search meals..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                applySearchAndSort(); // search + sort on Enter
+              }
+            }}
+            className="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700"
+          />
+
+
+        </div>
         {
           jwt && auth.user?.role === "ROLE_CUSTOMER" ? (
             <div className='space-y-5 lg:w-[80%] lg:pl-10'>
