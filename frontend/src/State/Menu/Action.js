@@ -80,47 +80,6 @@ export const getAllMenu = (jwt, sort = "", food = "") => {
   };
 };
 
-
-// Updated getAllMenu
-// export const getAllMenu = (jwt, sortPath = "") => {
-//     return async (dispatch) => {
-//         dispatch({ type: GET_ALL_MENU_REQUEST });
-//         try {
-//             console.log("getAllMenu called", sortPath);
-//             const endpoint = sortPath ? `/api/food/${sortPath}` : `/api/food`;
-//             const { data } = await api.get(endpoint, {
-//                 headers: {
-//                     Authorization: `Bearer ${jwt}`
-//                 }
-//             });
-//             dispatch({ type: GET_ALL_MENU_SUCCESS, payload: data });
-//         } catch (error) {
-//             dispatch({ type: GET_ALL_MENU_FAILURE, payload: error });
-//         }
-//     };
-// };
-
-
-// export const getAllMenu = (jwt) => {
-//     return async (dispatch) => {
-//         dispatch({type: GET_ALL_MENU_REQUEST});
-//         try {
-//             console.log("getAllfood called");
-//             const { data } = await api.get(
-//                 `/api/food`,
-//                 {
-//                     headers: {
-//                         Authorization: `Bearer ${jwt}`
-//                     }
-//                 }
-//             );
-//             dispatch({type: GET_ALL_MENU_SUCCESS, payload: data});
-//         } catch(error) {
-//             dispatch({type: GET_ALL_MENU_FAILURE, payload:error});
-//         }
-//     };
-// }
-
 export const getAllMenuItems = (reqData) => {
     return async (dispatch) => {
         dispatch({ type: GET_ALL_MENU_ITEMS_REQUEST });

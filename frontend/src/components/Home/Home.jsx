@@ -125,21 +125,6 @@ const Home = () => {
           Order From Our Handpicked Favorite Restaurants
         </h1>
 
-        {/* {
-          jwt ? (
-            <div className='flex flex-wrap items-center justify-around gap'>
-              {
-                restaurant?.restaurants?.map((item) => {
-                  const isFavorite = restaurant?.favorites?.some(fav => fav.id === item.id);
-                  return <RestaurantCard key={item.id} item={item} isFavorite={isFavorite} />;
-                })
-              }
-            </div>
-          ) : (
-            <p className="text-center text-gray-500">Please log in to view restaurants.</p>
-          )
-        } */}
-
         {
           jwt && auth.user?.role === "ROLE_CUSTOMER" ? (
             <div className='flex flex-wrap items-center justify-around gap'>
