@@ -41,24 +41,6 @@ public class CustomerFoodController {
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
 
-//    @GetMapping()
-//    public ResponseEntity<List<Food>> getAllFoods(@RequestHeader("Authorization") String jwt) {
-//        List<Food> foods = foodRepo.findAll();
-//        return new ResponseEntity<>(foods, HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/hth")
-//    public ResponseEntity<List<Food>> getFoodsSortedLowToHigh() {
-//        List<Food> foods = foodRepo.findAll(Sort.by(Sort.Direction.DESC, "price"));
-//        return ResponseEntity.ok(foods);
-//    }
-//
-//    @GetMapping("/htl")
-//    public ResponseEntity<List<Food>> getFoodsSortedHighToLow() {
-//        List<Food> foods = foodRepo.findAll(Sort.by(Sort.Direction.ASC, "price"));
-//        return ResponseEntity.ok(foods);
-//    }
-
     @GetMapping()
     public ResponseEntity<List<Food>> getAllFoods(
             @RequestHeader("Authorization") String jwt,
