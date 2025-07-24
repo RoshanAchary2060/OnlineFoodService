@@ -8,9 +8,12 @@ import {
     DELETE_MENU_ITEM_FAILURE,
     DELETE_MENU_ITEM_REQUEST,
     DELETE_MENU_ITEM_SUCCESS,
+    GET_ALL_MENU_FAILURE,
     GET_ALL_MENU_ITEMS_FAILURE,
     GET_ALL_MENU_ITEMS_REQUEST,
     GET_ALL_MENU_ITEMS_SUCCESS,
+    GET_ALL_MENU_REQUEST,
+    GET_ALL_MENU_SUCCESS,
     GET_MENU_ITEMS_BY_RESTAURANT_ID_FAILURE,
     GET_MENU_ITEMS_BY_RESTAURANT_ID_REQUEST,
     GET_MENU_ITEMS_BY_RESTAURANT_ID_SUCCESS,
@@ -40,6 +43,26 @@ export const createMenuItem = ({ menu, jwt }) => {
             dispatch({ type: CREATE_MENU_ITEM_FAILURE, payload: error });
         }
     }
+}
+
+export const getAllMenu = (jwt) => {
+    return async (dispatch) => {
+        dispatch({type: GET_ALL_MENU_REQUEST});
+        try {
+            console.log("getAllfood called");
+            const { data } = await api.get(
+                `/api/food`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`
+                    }
+                }
+            );
+            dispatch({type: GET_ALL_MENU_SUCCESS, payload: data});
+        } catch(error) {
+            dispatch({type: GET_ALL_MENU_FAILURE, payload:error});
+        }
+    };
 }
 
 export const getAllMenuItems = (reqData) => {

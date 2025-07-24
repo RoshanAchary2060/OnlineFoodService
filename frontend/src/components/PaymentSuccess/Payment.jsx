@@ -38,6 +38,7 @@ const Payment = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <form
         action="https://rc-epay.esewa.com.np/api/epay/main/v2/form"
+        // action="https://uat.esewa.com.np/api/epay/main/v2/form"
         method="POST"
         className="bg-gray-800 shadow-lg rounded-xl p-8 w-full max-w-md"
       >

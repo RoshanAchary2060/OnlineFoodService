@@ -39,4 +39,10 @@ public class CustomerFoodController {
         List<Food> foods = foodRepo.findByRestaurantId(restaurantId);
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
+
+    @GetMapping()
+    public ResponseEntity<List<Food>> getAllFoods(@RequestHeader("Authorization") String jwt) {
+        List<Food> foods = foodRepo.findAll();
+        return new ResponseEntity<>(foods, HttpStatus.OK);
+    }
 }

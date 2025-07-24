@@ -5,7 +5,8 @@ const initialState = {
     loading: false,
     error: null,
     search: [],
-    message: null
+    message: null,
+    allMenu: [],
 };
 
 const menuItemReducer = (state = initialState, action) => {
@@ -16,6 +17,12 @@ case actionTypes.GET_ALL_MENU_ITEMS_SUCCESS:
         menuItems: action.payload,
         loading: false
       };
+
+       case actionTypes.GET_ALL_MENU_SUCCESS:
+         return {
+            ...state,
+            allMenu: action.payload
+         }
 
         case actionTypes.CREATE_MENU_ITEM_REQUEST:
         case actionTypes.GET_MENU_ITEMS_BY_RESTAURANT_ID_REQUEST:

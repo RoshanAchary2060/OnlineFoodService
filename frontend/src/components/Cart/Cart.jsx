@@ -87,6 +87,7 @@ const totalAmount = cart.cart.total + cartItems.length * 2;
 
     // ✅ Navigate to payment page and pass amount
     navigate('/payment', { state: { totalAmount } });
+    // navigate('/khaltipayment', { state: {totalAmount: totalAmount * 100 } });
 
         // navigate('/my-profile/orders');
     }

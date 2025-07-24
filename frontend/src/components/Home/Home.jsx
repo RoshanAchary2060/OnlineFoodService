@@ -6,15 +6,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllRestaurantsAction, getUserFavoritesAction } from '../../State/Restaurant/Action';
 import { useNavigate } from 'react-router-dom';
 import { findCart } from '../../State/Cart/Action';
+import { getAllMenu } from '../../State/Menu/Action';
+import MenuCard from '../Restaurant/MenuCard';
+import AllMenuCard from '../Restaurant/AllMenuCard';
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { restaurant, auth } = useSelector(store => store);
+  const { restaurant, auth, menu } = useSelector(store => store);
   const jwt = auth.jwt || localStorage.getItem('jwtoriginal');
 
   useEffect(() => {
     if (jwt) {
+      dispatch(getAllMenu(jwt));
       dispatch(getAllRestaurantsAction(jwt));
       dispatch(findCart(jwt));
       dispatch(getUserFavoritesAction(jwt))
@@ -34,10 +38,36 @@ const Home = () => {
         <div className='cover absolute top-0 left-0 right-0'></div>
         <div className='fadeout'></div>
       </section>
+      <section className='p-10 lg:py-10 lg:px-20'>
+        <p className='text-center text-2xl font-semibold text-gray-400 py-3 pb-10'>Customer Favorites</p>
+        <MultiItemCarousel />
+      </section>
 
       <section className='p-10 lg:py-10 lg:px-20'>
-        <p className='text-2xl font-semibold text-gray-400 py-3 pb-10'>Top Meals</p>
-        <MultiItemCarousel />
+        <p className='text-2xl font-semibold text-gray-400 py-3 pb-10'>Top Meals Available Today</p>
+        {/* <div className='space-y-5 lg:w-[80%] lg:pl-10' >
+          {
+            menu.allMenu.map((item) =>
+              <MenuCard item={item} />
+            )
+          }
+        </div> */}
+
+        {
+          jwt && auth.user?.role === "ROLE_CUSTOMER" ? (
+            <div className='space-y-5 lg:w-[80%] lg:pl-10'>
+              {
+                menu.allMenu.map((item) =>
+                  <AllMenuCard all={true} key={item.id} item={item} />
+                )
+              }
+            </div>
+          ) : (
+            <p className="text-center text-gray-500">Please log in to view menu items.</p>
+          )
+        }
+
+        {/* <MultiItemCarousel /> */}
       </section>
 
       <section className='px-5 lg:px-20 pt-10'>
