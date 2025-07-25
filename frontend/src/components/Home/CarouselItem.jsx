@@ -1,5 +1,3 @@
-import React from 'react'
-
 const CarouselItem = ({image, title}) => {
   return (
     <div className='flex flex-col justify-center items-center'>
@@ -8,5 +6,4 @@ const CarouselItem = ({image, title}) => {
     </div>
   )
 }
-
 export default CarouselItem

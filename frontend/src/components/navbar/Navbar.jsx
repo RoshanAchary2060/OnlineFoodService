@@ -7,7 +7,7 @@ import './Navbar.css';
 import { Person } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { findCart } from '../../State/Cart/Action'; // 🔁 Update this path as needed
+import { findCart } from '../../State/Cart/Action';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 
@@ -16,6 +16,7 @@ export const Navbar = () => {
     const { auth, cart } = useSelector(store => store);
     const navigate = useNavigate();
     const jwt = auth.jwt || localStorage.getItem('jwtoriginal');
+
     useEffect(() => {
         if (jwt && auth.user?.role === "ROLE_CUSTOMER") {
             dispatch(findCart(jwt));
@@ -52,7 +53,6 @@ export const Navbar = () => {
                     <InfoIcon sx={{ fontSize: '2.5rem' }} />
                 </IconButton>
                 <div>
-
                     {auth.user ? (
                         <Avatar
                             onClick={handleAvatarClick}
@@ -75,7 +75,6 @@ export const Navbar = () => {
                         <ShoppingCartIcon sx={{ fontSize: '1.5rem' }} />
                     </Badge>
                 </IconButton>}
-
                 </div>
             </div>
         </div>

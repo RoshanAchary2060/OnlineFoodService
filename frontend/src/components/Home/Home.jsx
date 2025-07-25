@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Home.css';
 import MultiItemCarousel from './MultiItemCarousel';
 import RestaurantCard from '../Restaurant/RestaurantCard';
@@ -7,38 +7,21 @@ import { getAllRestaurantsAction, getUserFavoritesAction } from '../../State/Res
 import { useNavigate } from 'react-router-dom';
 import { findCart } from '../../State/Cart/Action';
 import { getAllMenu } from '../../State/Menu/Action';
-import MenuCard from '../Restaurant/MenuCard';
 import AllMenuCard from '../Restaurant/AllMenuCard';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { restaurant, auth, menu } = useSelector(store => store);
   const jwt = auth.jwt || localStorage.getItem('jwtoriginal');
-
-  // const handleSortChange = (value) => {
-  //   if (value === "lowToHigh") {
-  //     dispatch(getAllMenu(jwt, "hth")); // low to high
-  //   } else if (value === "highToLow") {
-  //     dispatch(getAllMenu(jwt, "htl")); // high to low
-  //   } else {
-  //     dispatch(getAllMenu(jwt, "")); // default
-  //   }
-  // };
-
   const handleSortChange = (value) => {
     setSortOrder(value);
     dispatch(getAllMenu(jwt, value, searchText));
   };
-
-
   const [searchText, setSearchText] = useState("");
-
-  const [sortOrder, setSortOrder] = useState(""); // "hth", "htl", or ""
+  const [sortOrder, setSortOrder] = useState("");
   const applySearchAndSort = () => {
     dispatch(getAllMenu(jwt, sortOrder, searchText));
   };
-
 
   useEffect(() => {
     if (jwt) {
@@ -80,14 +63,6 @@ const Home = () => {
         </select>
 
         <div className="flex gap-3 mt-2 text-gray-200 mb-2 items-center">
-          {/* <input
-            type="text"
-            placeholder="Search meals..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700"
-          /> */}
-
           <input
             type="text"
             placeholder="Search meals..."
@@ -100,8 +75,6 @@ const Home = () => {
             }}
             className="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700"
           />
-
-
         </div>
         {
           jwt && auth.user?.role === "ROLE_CUSTOMER" ? (
@@ -116,15 +89,11 @@ const Home = () => {
             <p className="text-center text-gray-500">Please log in to view menu items.</p>
           )
         }
-
-        {/* <MultiItemCarousel /> */}
       </section>
-
       <section className='px-5 lg:px-20 pt-10'>
         <h1 className='text-2xl font-semibold text-gray-400 pb-8'>
           Order From Our Handpicked Favorite Restaurants
         </h1>
-
         {
           jwt && auth.user?.role === "ROLE_CUSTOMER" ? (
             <div className='flex flex-wrap items-center justify-around gap'>
@@ -137,7 +106,6 @@ const Home = () => {
                       item={item}
                       isFavorite={isFavorite}
                       onRemove={() => {
-                        // This will refresh favorites when an item is removed
                         dispatch(getUserFavoritesAction(jwt));
                       }}
                     />
@@ -149,11 +117,8 @@ const Home = () => {
             <p className="text-center text-gray-500">Please log in to view restaurants.</p>
           )
         }
-
-
       </section>
     </div>
   );
 };
-
 export default Home;

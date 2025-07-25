@@ -1,4 +1,3 @@
-import React from 'react';
 import { useLocation } from 'react-router-dom';
 import KhaltiCheckout from 'khalti-checkout-web';
 
@@ -61,5 +60,4 @@ const KhaltiPayment = () => {
     </div>
   );
 };
-
 export default KhaltiPayment;
